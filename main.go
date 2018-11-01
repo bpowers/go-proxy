@@ -86,14 +86,12 @@ func main() {
 	caCertPool.AppendCertsFromPEM(caCert)
 
 	tlsConfig := &tls.Config{
-		// Certificates: []tls.Certificate{certPair},
-
 		ClientAuth: tls.RequireAndVerifyClientCert,
 		ClientCAs:  caCertPool,
 
 		CipherSuites: []uint16{
-			tls.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
 			tls.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+			tls.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
 		},
 		PreferServerCipherSuites: true,
 
@@ -102,10 +100,12 @@ func main() {
 		MinVersion: tls.VersionTLS12,
 
 		CurvePreferences: []tls.CurveID{
+			tls.X25519,
 			tls.CurveP256,
 			tls.CurveP384,
-			// tls.X25519,
 		},
+
+		// KeyLogWriter: os.Stderr,
 	}
 	tlsConfig.BuildNameToCertificate()
 
